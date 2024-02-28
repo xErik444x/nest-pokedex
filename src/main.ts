@@ -4,8 +4,19 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // whitelist: true,
+      // forbidNonWhitelisted: true,
+      //transform para cambiar los valores de las query de string al dto / number
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
   app.setGlobalPrefix('/api/v2/');
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
+  console.log(`App running on port ${process.env.PORT}`);
 }
 bootstrap();
